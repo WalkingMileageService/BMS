@@ -4,23 +4,24 @@ import (
 	"github.com/WalkingMileageService/BMS/router"
 	swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2"
-	// Side Effect import for auto-generated swagger documentation
-	//_ "medium_go_fiber_swagger/docs"
+	// replace with your own docs folder, usually "github.com/username/reponame/docs"
+	_ "github.com/WalkingMileageService/BMS/docs"
 )
 
-// @title Fiber Example API
+// @title Board Management Server API
 // @version 1.0
-// @description This is a sample swagger for Fiber
-// @contact.name API Support
-// @contact.email youremail@provider.com
-// @host localhost:3000
+// @description This is a board managemet server api for WalkingMileageService
+// @contact.name jyson
+// @contact.email jysohn0825@gmail.com
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+// @host localhost:3001
 // @BasePath /
 func main() {
 	app := fiber.New()
-	app.Get("/swagger/*", swagger.New(swagger.Config{ // custom
-		URL:         "/swagger/doc.json",
-		DeepLinking: false,
-	}))
+	app.Get("/swagger/*", swagger.HandlerDefault) // default
+
 	router.SetupRoutes(app)
-	app.Listen(":3000")
+
+	app.Listen(":3001")
 }

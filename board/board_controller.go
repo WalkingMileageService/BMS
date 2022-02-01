@@ -1,25 +1,57 @@
 package board
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/gofiber/fiber/v2"
+	"log"
+)
 
-// ShowAccount godoc
-// @Summary      Show an account
-// @Description  get string by ID
-// @Tags         accounts
+// CreateBoard Create Board godoc
+// @Summary      Create a Board
+// @Description  create a board by user Id
+// @Tags         board
 // @Accept       json
 // @Produce      json
-// @Param        id   path      int  true  "Account ID"
-// @Success      200  {object}  model.Account
-// @Failure      400  {object}  httputil.HTTPError
-// @Failure      404  {object}  httputil.HTTPError
-// @Failure      500  {object}  httputil.HTTPError
-// @Router       /accounts/{id} [get]
+// @Param        board   path      int  true  "Account ID"
+// @Success      200  {object}  Board
+// @Router       /board [post]
 func CreateBoard(c *fiber.Ctx) error {
-	return nil
+
+	log.Println("check")
+	var body Board
+
+	err := c.BodyParser(&body)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"error": "Cannot parse JSON",
+		})
+	}
+
+	board := Board{
+		Id:      1,
+		Title:   body.Title,
+		Content: body.Content,
+		UserId:  body.UserId,
+	}
+	return c.Status(fiber.StatusCreated).JSON(board)
 }
 
+// FindBoard Find a Board godoc
+// @Summary      Find a Board
+// @Description  Find a board by user Id
+// @Tags         board
+// @Accept       json
+// @Produce      json
+// @Param        boardId   path      int  true  "Board ID"
+// @Success      200  {object}  Board
+// @Router       /board/{boardId} [get]
 func FindBoard(c *fiber.Ctx) error {
-	return nil
+	board := Board{
+		Id:      123,
+		Title:   "Check Title",
+		Content: "Check Content",
+		UserId:  "Check UserId",
+	}
+	return c.Status(fiber.StatusCreated).JSON(board)
 }
 
 func FindAllBoard(c *fiber.Ctx) error {

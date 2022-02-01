@@ -1,11 +1,13 @@
 package board
 
-import "time"
+import (
+	"github.com/WalkingMileageService/BMS/global/model"
+)
 
 type Board struct {
-	Title   string
-	Content string
-	UserId  string
-	Created time.Time
-	Updated time.Time
+	Id       int64  `json:"id"`
+	Title    string `json:"title"`
+	Content  string `json:"content"`
+	UserId   string `json:"userId"`
+	BaseDate model.BaseDate
 }

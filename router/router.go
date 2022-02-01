@@ -6,9 +6,9 @@ import (
 )
 
 func SetupRoutes(app *fiber.App) {
-	app.Get("/api/board", board.FindBoard)
-	app.Get("/api/boards", board.FindAllBoard)
-	app.Post("/api/board", board.CreateBoard)
-	app.Put("/api/board", board.UpdateBoard)
-	app.Delete("/api/board", board.DeleteBoard)
+	app.Get("/board/:boardId", board.FindBoard)
+	app.Get("/boards", board.FindAllBoard)
+	app.Post("/board", board.CreateBoard)
+	app.Put("/board", board.UpdateBoard)
+	app.Delete("/board", board.DeleteBoard)
 }

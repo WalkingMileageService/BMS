@@ -1,15 +1,117 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample swagger for Fiber",
-        "title": "Fiber Example API",
+        "description": "This is a board managemet server api for WalkingMileageService",
+        "title": "Board Management Server API",
         "contact": {
-            "name": "API Support",
-            "email": "youremail@provider.com"
+            "name": "jyson",
+            "email": "jysohn0825@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
         },
         "version": "1.0"
     },
-    "host": "localhost:3000",
+    "host": "localhost:3001",
     "basePath": "/",
-    "paths": {}
+    "paths": {
+        "/board": {
+            "post": {
+                "description": "create a board by user Id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "board"
+                ],
+                "summary": "Create a Board",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Account ID",
+                        "name": "board",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/board.Board"
+                        }
+                    }
+                }
+            }
+        },
+        "/board/{boardId}": {
+            "get": {
+                "description": "Find a board by user Id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "board"
+                ],
+                "summary": "Find a Board",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Board ID",
+                        "name": "boardId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/board.Board"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "board.Board": {
+            "type": "object",
+            "properties": {
+                "baseDate": {
+                    "$ref": "#/definitions/model.BaseDate"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "userId": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.BaseDate": {
+            "type": "object",
+            "properties": {
+                "created": {
+                    "type": "string"
+                },
+                "updated": {
+                    "type": "string"
+                }
+            }
+        }
+    }
 }

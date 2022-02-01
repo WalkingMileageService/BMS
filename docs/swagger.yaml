@@ -1,11 +1,77 @@
 basePath: /
-host: localhost:3000
+definitions:
+  board.Board:
+    properties:
+      baseDate:
+        $ref: '#/definitions/model.BaseDate'
+      content:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      userId:
+        type: string
+    type: object
+  model.BaseDate:
+    properties:
+      created:
+        type: string
+      updated:
+        type: string
+    type: object
+host: localhost:3001
 info:
   contact:
-    email: youremail@provider.com
-    name: API Support
-  description: This is a sample swagger for Fiber
-  title: Fiber Example API
+    email: jysohn0825@gmail.com
+    name: jyson
+  description: This is a board managemet server api for WalkingMileageService
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Board Management Server API
   version: "1.0"
-paths: {}
+paths:
+  /board:
+    post:
+      consumes:
+      - application/json
+      description: create a board by user Id
+      parameters:
+      - description: Account ID
+        in: path
+        name: board
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/board.Board'
+      summary: Create a Board
+      tags:
+      - board
+  /board/{boardId}:
+    get:
+      consumes:
+      - application/json
+      description: Find a board by user Id
+      parameters:
+      - description: Board ID
+        in: path
+        name: boardId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/board.Board'
+      summary: Find a Board
+      tags:
+      - board
 swagger: "2.0"
