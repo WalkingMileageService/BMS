@@ -2,7 +2,6 @@ package board
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"log"
 )
 
 // CreateBoard Create Board godoc
@@ -16,23 +15,15 @@ import (
 // @Router       /board [post]
 func CreateBoard(c *fiber.Ctx) error {
 
-	log.Println("check")
-	var body Board
+	board, statusCode := CreateBoardService(c)
 
-	err := c.BodyParser(&body)
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+	if statusCode == fiber.StatusBadRequest {
+		return c.Status(statusCode).JSON(fiber.Map{
 			"error": "Cannot parse JSON",
 		})
-	}
 
-	board := Board{
-		Id:      1,
-		Title:   body.Title,
-		Content: body.Content,
-		UserId:  body.UserId,
 	}
-	return c.Status(fiber.StatusCreated).JSON(board)
+	return c.Status(statusCode).JSON(board)
 }
 
 // FindBoard Find a Board godoc
