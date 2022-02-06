@@ -1,27 +1,12 @@
 package common
 
 import (
+	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"strconv"
 	"strings"
-	"sync"
-)
-
-package common
-
-import (
-"compress/gzip"
-"fmt"
-"github.com/json-iterator/go"
-"io"
-"log"
-"net/http"
-"strconv"
-"strings"
-"sync"
 )
 
 func SendResponse(w http.ResponseWriter, r *http.Request, responseCode int, responseData interface{}, errorMessage ErrorMessage) {
@@ -33,18 +18,13 @@ func SendResponse(w http.ResponseWriter, r *http.Request, responseCode int, resp
 
 	if responseCode == http.StatusOK {
 		if responseData != nil {
-			doc, _ = jsoniter.Marshal(responseData)
+			doc, _ = json.Marshal(responseData)
 			bodyLen = len(doc)
-
-			//if ResponseCompressEnable && bodyLen >= ResponseCompressMinSize {
-			//w.Header().Set("Content-Encoding", "gzip")
-			//}
-
 		} else {
 			w.Header().Set("Content-Length", "0")
 		}
 	} else {
-		doc, _ = jsoniter.Marshal(errorMessage)
+		doc, _ = json.Marshal(errorMessage)
 	}
 
 	corrId := r.Header.Get("X-KM-Correlation-Id")
@@ -75,7 +55,7 @@ func SendResponseWithoutLog(w http.ResponseWriter, r *http.Request, responseCode
 
 	if responseCode == http.StatusOK {
 		if responseData != nil {
-			doc, _ = jsoniter.Marshal(responseData)
+			doc, _ = json.Marshal(responseData)
 			bodyLen = len(doc)
 			//if ResponseCompressEnable && bodyLen > ResponseCompressMinSize {
 			//w.Header().Set("Content-Encoding", "gzip")
@@ -84,7 +64,7 @@ func SendResponseWithoutLog(w http.ResponseWriter, r *http.Request, responseCode
 			w.Header().Set("Content-Length", "0")
 		}
 	} else {
-		doc, _ = jsoniter.Marshal(errorMessage)
+		doc, _ = json.Marshal(errorMessage)
 	}
 
 	corrId := r.Header.Get("X-KM-Correlation-Id")
@@ -105,62 +85,13 @@ func SendResponseWithoutLog(w http.ResponseWriter, r *http.Request, responseCode
 	w.Write(doc)
 }
 
-// TODO : GZIP
-
-// Create a Pool that contains previously used Writers and
-// can create new ones if we run out.
-var Zippers = sync.Pool{New: func() interface{} {
-	return gzip.NewWriter(nil)
-}}
-
-// Gzip Compression
-type gzipResponseWriter struct {
-	io.Writer
-	http.ResponseWriter
-}
-
-func (w gzipResponseWriter) Write(b []byte) (int, error) {
-
-	if len(b) < ResponseCompressMinSize {
-		return w.ResponseWriter.Write(b)
-	}
-
-	return w.Writer.Write(b)
-}
-
-// Wrap a http.Handler to support transparent gzip encoding.
-func GzipHandler(handler http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
-		if ResponseCompressEnable {
-			// Do not set encoding here
-			//w.Header().Set("Content-Encoding", "gzip")
-
-			// Get a Writer from the Pool
-			gz := Zippers.Get().(*gzip.Writer)
-
-			// When done, put the Writer back in to the Pool
-			defer Zippers.Put(gz)
-
-			// We use Reset to set the writer we want to use.
-			gz.Reset(w)
-			defer gz.Close()
-
-			gzw := &gzipResponseWriter{Writer: gz, ResponseWriter: w}
-			handler.ServeHTTP(gzw, r)
-		} else {
-			handler.ServeHTTP(w, r)
-		}
-	})
-}
-
 func ReplaceMustacheWordAll(s string, mustacheWord string, new string) string {
 	return strings.Replace(s, mustacheWord, new, -1)
 }
 
 func PrintJson(args ...interface{}) string {
 
-	b, err := jsoniter.Marshal(args[0])
+	b, err := json.Marshal(args[0])
 
 	if err != nil {
 		fmt.Println("Json Marshal Error !")
