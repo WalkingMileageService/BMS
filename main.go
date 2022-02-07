@@ -21,6 +21,8 @@ func main() {
 	app := fiber.New()
 	app.Get("/swagger/*", swagger.HandlerDefault) // default
 
+	// TODO DB Conncet, error exception handler + api sender setting
+
 	router.SetupRoutes(app)
 
 	app.Listen(":3001")
