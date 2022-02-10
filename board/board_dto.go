@@ -1,7 +1,7 @@
 package board
 
 import (
-	"github.com/WalkingMileageService/BMS/global/model"
+	"github.com/WalkingMileageService/BMS/internal/model"
 )
 
 type Board struct {
