@@ -2,8 +2,9 @@ package router
 
 import (
 	"github.com/WalkingMileageService/BMS/board"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
+	swagger "github.com/swaggo/echo-swagger"
 	"net/http"
 )
 
@@ -19,13 +20,15 @@ func SetupRoutes(app *echo.Echo) {
 	// debug 모드로 사용하기 위해서는 디버그 설정을 true로 변경
 	//app.Debug = true
 
-	app.GET("/health", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Healthy!")
-	})
-
 	app.GET("/board/:boardId", board.FindBoard)
 	app.GET("/boards", board.FindAllBoard)
 	app.POST("/board", board.CreateBoard)
 	app.PUT("/board", board.UpdateBoard)
 	app.DELETE("/board", board.DeleteBoard)
+
+	app.GET("/health", func(c echo.Context) error {
+		return c.String(http.StatusOK, "Healthy!")
+	})
+	app.GET("/swagger/*", swagger.WrapHandler)
+
 }

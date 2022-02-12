@@ -1,13 +1,18 @@
-basePath: /
+basePath: /bms
 definitions:
   board.Board:
     properties:
       baseDate:
         $ref: '#/definitions/model.BaseDate'
-      content:
-        type: string
+      boardInfo:
+        $ref: '#/definitions/board.BoardInfo'
       id:
         type: integer
+    type: object
+  board.BoardInfo:
+    properties:
+      content:
+        type: string
       title:
         type: string
       userId:
@@ -20,29 +25,24 @@ definitions:
       updated:
         type: string
     type: object
-host: localhost:3001
+host: localhost:8080
 info:
-  contact:
-    email: jysohn0825@gmail.com
-    name: jyson
-  description: This is a board managemet server api for WalkingMileageService
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  title: Board Management Server API
+  contact: {}
+  title: Board Management Server Swagger
   version: "1.0"
 paths:
   /board:
     post:
       consumes:
       - application/json
-      description: create a board by user Id
+      description: Create Board
       parameters:
-      - description: Account ID
-        in: path
+      - description: BoardCreateRequest
+        in: body
         name: board
         required: true
-        type: integer
+        schema:
+          $ref: '#/definitions/board.BoardInfo'
       produces:
       - application/json
       responses:
@@ -50,28 +50,5 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/board.Board'
-      summary: Create a Board
-      tags:
-      - board
-  /board/{boardId}:
-    get:
-      consumes:
-      - application/json
-      description: Find a board by user Id
-      parameters:
-      - description: Board ID
-        in: path
-        name: boardId
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/board.Board'
-      summary: Find a Board
-      tags:
-      - board
+      summary: Create Board
 swagger: "2.0"

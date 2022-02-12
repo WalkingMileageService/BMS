@@ -1,73 +1,32 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a board managemet server api for WalkingMileageService",
-        "title": "Board Management Server API",
-        "contact": {
-            "name": "jyson",
-            "email": "jysohn0825@gmail.com"
-        },
-        "license": {
-            "name": "Apache 2.0",
-            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-        },
+        "title": "Board Management Server Swagger",
+        "contact": {},
         "version": "1.0"
     },
-    "host": "localhost:3001",
-    "basePath": "/",
+    "host": "localhost:8080",
+    "basePath": "/bms",
     "paths": {
         "/board": {
             "post": {
-                "description": "create a board by user Id",
+                "description": "Create Board",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "tags": [
-                    "board"
-                ],
-                "summary": "Create a Board",
+                "summary": "Create Board",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "Account ID",
+                        "description": "BoardCreateRequest",
                         "name": "board",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
+                        "in": "body",
+                        "required": true,
                         "schema": {
-                            "$ref": "#/definitions/board.Board"
+                            "$ref": "#/definitions/board.BoardInfo"
                         }
-                    }
-                }
-            }
-        },
-        "/board/{boardId}": {
-            "get": {
-                "description": "Find a board by user Id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "board"
-                ],
-                "summary": "Find a Board",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Board ID",
-                        "name": "boardId",
-                        "in": "path",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -88,11 +47,19 @@
                 "baseDate": {
                     "$ref": "#/definitions/model.BaseDate"
                 },
-                "content": {
-                    "type": "string"
+                "boardInfo": {
+                    "$ref": "#/definitions/board.BoardInfo"
                 },
                 "id": {
                     "type": "integer"
+                }
+            }
+        },
+        "board.BoardInfo": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
                 },
                 "title": {
                     "type": "string"
