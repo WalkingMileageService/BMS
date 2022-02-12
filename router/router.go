@@ -7,8 +7,7 @@ import (
 	"net/http"
 )
 
-func SetupRoutes() {
-	app := echo.New()
+func SetupRoutes(app *echo.Echo) {
 	// echo middleware func
 	app.Use(middleware.Logger())                             //Setting logger
 	app.Use(middleware.Recover())                            //Recover from panics anywhere in the chain
