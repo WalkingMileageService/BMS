@@ -8,7 +8,6 @@ import (
 
 // @title Board Management Server Swagger
 // @version 1.0
-// @host localhost:8080
 // @BasePath /bms
 func main() {
 	app := echo.New()

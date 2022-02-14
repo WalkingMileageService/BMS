@@ -4,31 +4,40 @@ import (
 	"github.com/WalkingMileageService/BMS/board"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	swagger "github.com/swaggo/echo-swagger"
-	"net/http"
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 func SetupRoutes(app *echo.Echo) {
-	// echo middleware func
-	app.Use(middleware.Logger())                             //Setting logger
-	app.Use(middleware.Recover())                            //Recover from panics anywhere in the chain
-	app.Use(middleware.CORSWithConfig(middleware.CORSConfig{ //CORS Middleware
-		AllowOrigins: []string{"*"},
-		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete},
-	}))
+
+	app.Use(middleware.Logger())
+	app.Use(middleware.Recover())
 
 	// debug 모드로 사용하기 위해서는 디버그 설정을 true로 변경
 	//app.Debug = true
 
-	app.GET("/board/:boardId", board.FindBoard)
-	app.GET("/boards", board.FindAllBoard)
-	app.POST("/board", board.CreateBoard)
-	app.PUT("/board", board.UpdateBoard)
-	app.DELETE("/board", board.DeleteBoard)
+	root := app.Group("/bms")
+	{
+		api := root.Group("/api")
+		{
+			v1 := api.Group("/v1")
+			{
+				v1.GET("/board/:boardId", board.FindBoard)
+				v1.GET("/boards", board.FindAllBoard)
+				v1.POST("/board", board.CreateBoard)
+				v1.PUT("/board", board.UpdateBoard)
+				v1.DELETE("/board", board.DeleteBoard)
+			}
+		}
 
-	app.GET("/health", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Healthy!")
-	})
-	app.GET("/swagger/*", swagger.WrapHandler)
+		actuator := root.Group("")
+		{
+			actuator.GET("/health", nil)
+			actuator.GET("/shutdown", nil)
+		}
 
+		swagger := root.Group("/swagger")
+		{
+			swagger.GET("/*", echoSwagger.WrapHandler)
+		}
+	}
 }
