@@ -5,11 +5,19 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
+	"log"
+	"os"
 )
 
-func SetupRoutes(app *echo.Echo) {
+func SetupRoutes() {
+	app := echo.New()
 
-	app.Use(middleware.Logger())
+	app.Use(middleware.LoggerWithConfig(
+		middleware.LoggerConfig{
+			Format:           "${time_rfc3339_nano} INFO T[${tid}] U[${userId}] - [ - ] ${method} ${uri} ${status} (${latency_human})\n",
+			CustomTimeFormat: "2006-01-02 15:04:05.00000",
+			Output:           os.Stdout,
+		}))
 	app.Use(middleware.Recover())
 
 	// debug 모드로 사용하기 위해서는 디버그 설정을 true로 변경
@@ -40,4 +48,6 @@ func SetupRoutes(app *echo.Echo) {
 			swagger.GET("/*", echoSwagger.WrapHandler)
 		}
 	}
+
+	log.Fatal(app.Start(":3000"))
 }
