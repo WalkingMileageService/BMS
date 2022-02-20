@@ -11,6 +11,6 @@ import (
 // @BasePath /bms
 func main() {
 	app := echo.New()
-	router.SetupRoutes(app)
+	router.SetupRoutes()
 	app.Start(":8080")
 }
