@@ -46,7 +46,11 @@ func makeResponseByte(request *http.Request) (responseByte []byte, err error) {
 	client := &http.Client{}
 
 	response, err := client.Do(request)
-	defer response.Body.Close()
+	if response != nil {
+		responseByte, err = ioutil.ReadAll(response.Body)
+	} else {
+		return
+	}
 
 	responseByte, err = ioutil.ReadAll(response.Body)
 	return
